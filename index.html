@@ -1,0 +1,30 @@
+<html>
+	<header>
+		<title>Run Run TiVo</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  		<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+  		<script type="text/javascript" src="http://code.createjs.com/createjs-2013.02.12.min.js"></script>
+  		<script src="ndgmr.Collision.js" type="text/javascript" charset="utf-8"></script>
+		<script src='Tivo.js'></script>
+		<script src='Mini.js'></script>
+		<script src='DVR.js'></script>
+		<script src='Game.js'></script>
+		<script type="text/javascript" charset="utf-8">
+			window.onload = init;
+			function init(){
+				var game;
+				var que = new createjs.LoadQueue(true);
+				que.addEventListener('complete',startGame,this);
+				que.loadManifest(['images/box_anim.png','images/box.png','images/electrode.png','images/miniSprite.png','images/tivoSprite.png']);
+				que.load();
+				
+				function startGame(){
+					game = new Game('gameCanvas');
+				}
+			}
+		</script>
+	</header>
+	<body>
+		<canvas id="gameCanvas" width='1024' height="300" style="border:1px #ccc solid;"></canvas>
+	</body>
+</html>
