@@ -1,82 +1,44 @@
-/**
- * @author Noel's
- */
 (function(){
-		
-	var Tivo = function(imagePath){
-		//public vars
-		this.life = 100;
-		
-		//private vars
-		var tivo = this;
-		var leftPress = false;
-		var rightPress = false;
-		var walkingLeft = false;
-		var walkingRight = false;
-		var spriteData = new createjs.SpriteSheet({
+
+	"use strict";
+
+	function Tivo(imagePath){
+		//call to super
+		createjs.BitmapAnimation.call(this);
+
+		//var
+		var _this = this;
+		_this.life = 100;
+		_this.leftPress = false;
+		_this.rightPress = false;
+		_this.walkingLeft = false;
+		_this.walkingRight = false;
+
+		//set sprite data
+		_this.spriteData = new createjs.SpriteSheet({
 			images:[imagePath],
 			frames:{width:85,height:85},
 			animations:{idle:[0],walkRight:[1,13],walkLeft:[14,26]}
 			
 		});
-		
-		tivo.initialize(spriteData);
-		tivo.gotoAndPlay("idle");
-		
-		//event listeners
-		tivo.addEventListener('tick',handleTick);
-		document.addEventListener('keydown',handleKeyDown);
-		document.addEventListener('keyup',handleKeyUp);
-		
-		//event handlers
-		function handleTick(e){
-			////////////////////////////////control tivo sprite
-	        if(leftPress == true && rightPress == false){
-	            if(tivo.x < 0){
-	              null;
-	            }else{
-	              tivo.x -= 5;
-	              tivo.walkLeft();
-	            }
-	          //console.log('left');
-	        }else if(rightPress == true && leftPress == false){
-	            if(tivo.x > 939){
-	              null;
-	            }else{
-	              tivo.x += 5;
-	              tivo.walkRight();
-	            }
-	
-	        }
-		}//end of handleTick
-		
-		function handleKeyDown(e){
-			switch(e.keyCode){
-				case 37: leftPress = true;
-				break;
-				
-				case 39: rightPress = true;
-				break;
-			}
-		}//end of keydown
-		
-		function handleKeyUp(e){
-			switch(e.keyCode){
-				case 37: leftPress = false;tivo.isWalkingLeft = false;
-				break;
-				
-				case 39: rightPress = false;tivo.isWalkingRight = false;
-				break;
-			}
-			
-			if(leftPress == false && rightPress == false){tivo.gotoAndPlay("idle");}
-		}//end of keyUp
-	
-	}//end of constructor
-	
-	Tivo.prototype.constructor = Tivo;	
-	Tivo.prototype = new createjs.BitmapAnimation();
-	
+
+		//initializiation
+		_this.initialize(_this.spriteData);
+		_this.gotoAndPlay("idle");
+
+
+		//add event listeners
+		_this.addEventListener('tick',handleTick);
+		document.addEventListener('keydown',handleKeyDown.bind(_this));
+		document.addEventListener('keyup',handleKeyUp.bind(_this));
+
+	}
+
+	/*prototype behaviors*/
+	Tivo.prototype.constructor = "Tivo";
+	Tivo.prototype = Object.create(createjs.BitmapAnimation.prototype);
+
+
 	Tivo.prototype.walkLeft = function(){
 		if(!this.isWalkingLeft){
             this.gotoAndPlay("walkLeft");
@@ -102,7 +64,60 @@
 	Tivo.prototype.getLife = function(){
 		return this.life;
 	}
+
+	/*Event Handlers*/
+	function handleTick(e){
+
+			var _this = e.target;
+
+			////////////////////////////////control tivo sprite
+	        if(_this.leftPress == true && _this.rightPress == false){
+	            if(_this.x < 0){
+	              null;
+	            }else{
+	              _this.x -= 5;
+	              _this.walkLeft();
+	            }
+	          //console.log('left');
+	        }else if(_this.rightPress == true && _this.leftPress == false){
+	            if(_this.x > 939){
+	              null;
+	            }else{
+	              _this.x += 5;
+	              _this.walkRight();
+	            }
 	
-	//allow access to tivo
+	        }
+	}
+
+	function handleKeyDown(e){
+
+			var _this = this;
+
+			switch(e.keyCode){
+				case 37: _this.leftPress = true;
+				break;
+				
+				case 39: _this.rightPress = true;
+				break;
+			}
+		}//end of keydown
+		
+		function handleKeyUp(e){
+
+			var _this = this;
+
+			switch(e.keyCode){
+				case 37: _this.leftPress = false;_this.isWalkingLeft = false;
+				break;
+				
+				case 39: _this.rightPress = false;_this.isWalkingRight = false;
+				break;
+			}
+			
+			if(_this.leftPress == false && _this.rightPress == false){_this.gotoAndPlay("idle");}
+		}//end of keyUp
+
+	//expose to global scope
 	window.Tivo = Tivo;
-})();
+}());
