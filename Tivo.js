@@ -28,7 +28,7 @@
 
 
 		//add event listeners
-		_this.addEventListener('tick',handleTick);
+		_this.addEventListener('tick',handleTick.bind(_this));
 		document.addEventListener('keydown',handleKeyDown.bind(_this));
 		document.addEventListener('keyup',handleKeyUp.bind(_this));
 
@@ -68,7 +68,7 @@
 	/*Event Handlers*/
 	function handleTick(e){
 
-			var _this = e.target;
+			var _this = this;
 
 			////////////////////////////////control tivo sprite
 	        if(_this.leftPress == true && _this.rightPress == false){
