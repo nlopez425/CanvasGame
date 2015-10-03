@@ -66,7 +66,7 @@
       		var object = e.target;
       		var collision = ndgmr.checkPixelCollision(object,tivo,.5);
       		if(collision){
-      			score += object.pointValue;
+      			score += object.getPoints();
       			scoreTrack.text = score;
       		}
       	}

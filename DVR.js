@@ -42,6 +42,12 @@
 	DVR.prototype.constructor = "DVR";
 	DVR.prototype = Object.create(createjs.BitmapAnimation.prototype);
 	
+	DVR.prototype.getPoints = function(){
+		
+		return this.pointValue;
+		
+	}
+	
 	
 	/*Event Handlers*/
 	function handleTick(e){
