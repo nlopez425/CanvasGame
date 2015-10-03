@@ -1,62 +1,76 @@
-/**
- * @author Noel's
- */
 (function (){
 	
-	var DVR = function(imagePath,stageObject,collisionObject){
-		this.pointValue = 10;
+	"use strict";
+	
+	function DVR(imagePath,stageObject,collisionObject){
 		
-		//private vars
-		var dvr = this;
-		var stage = stageObject ;
-		var drop;
-		var collision;
-		var pointScored = false;
-		var spriteData = new createjs.SpriteSheet({
+		//call to super
+		createjs.BitmapAnimation.call(this);
+		
+		//vars
+		var _this = this;
+		_this.stage = stageObject;
+		_this.collisionObj = collisionObject;
+		_this.drop;
+		_this.collision;
+		_this.pointScored = false;
+		
+		_this.spriteData = new createjs.SpriteSheet({
 			images:[imagePath],
 			frames:{width:193,height:83},
 			animations:{idle:[0],points:[1,5]}
 		});
 		
-		dvr.initialize(spriteData);
-		dvr.gotoAndPlay("idle");
+		
+		//initializations
+		_this.initialize(_this.spriteData);
+		_this.gotoAndPlay("idle");
 		
 		//event listeners
-		dvr.addEventListener('tick',handleTick);
-		dvr.addEventListener('animationend',handleAnimationFinish);
+		_this.addEventListener('tick',handleTick.bind(_this));
+		_this.addEventListener('animationend',handleAnimationFinish.bind(_this));
 		
 		//animation
-		drop = TweenMax.to(dvr,2.15,{y:stage.height, ease:Power3.easeIn,onComplete:finished,onReverseComplete:finished});
+		_this.drop = TweenMax.to(_this,2.15,{y:_this.stage.height, ease:Power3.easeIn,onComplete:finished.bind(_this),onReverseComplete:finished.bind(_this)});
 		
+	}
+	
+	
+	
+	/*Prototype Properties*/
+	DVR.prototype.constructor = "DVR";
+	DVR.prototype = Object.create(createjs.BitmapAnimation.prototype);
+	
+	
+	/*Event Handlers*/
+	function handleTick(e){
 		
+		var _this = this;
 		
-		//handlers
-		function handleTick(e){
-			
-			 collision = ndgmr.checkPixelCollision(dvr,collisionObject,0.75);
-			 
-			 if(collision){
-			 	drop.reverse();
-			 	dvr.gotoAndPlay("points");
-			 }
-			 
+		 _this.collision = ndgmr.checkPixelCollision(_this,_this.collisionObj,0.75);
+		 
+		 if(_this.collision){
+		 	_this.drop.reverse();
+		 	_this.gotoAndPlay("points");
+		 }
+		 
 
-		}
+	}
+	
+	function finished(){
 		
-		function finished(){
-			stage.removeChild(dvr);
-		}
+		var _this = this;
 		
-		function handleAnimationFinish(e){
-			dvr.stop();
-		}
+		_this.stage.removeChild(_this);
+	}
+	
+	function handleAnimationFinish(e){
 		
-	}//end of constructor
+		var _this = this;
+		
+		_this.stop();
+	}
 	
-	DVR.prototype.constructor = DVR;
-	DVR.prototype = new createjs.BitmapAnimation();
-	
-	
-	
+	//expose to global scope
 	window.DVR = DVR;
-})();
+}());
