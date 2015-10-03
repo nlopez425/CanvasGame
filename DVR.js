@@ -9,6 +9,7 @@
 		
 		//vars
 		var _this = this;
+		_this.pointValue = 10;
 		_this.stage = stageObject;
 		_this.collisionObj = collisionObject;
 		_this.drop;
